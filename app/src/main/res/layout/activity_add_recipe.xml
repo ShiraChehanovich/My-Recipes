@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddRecipe">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <EditText
+            android:id="@+id/txtRecipeNameId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="recipe name"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="right"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="left">
+
+            <EditText
+                android:id="@+id/txtTaskId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="enter task" />
+
+            <EditText
+                android:id="@+id/txtIngredientId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="amount and ingredient" />
+
+            <EditText
+                android:id="@+id/txtMinutesId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="minutes for task"
+                android:inputType="time" />
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btnAddTaskId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:background="@drawable/btn_round"/>
+
+            <ListView
+                android:id="@+id/listViewRecipeId"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="10dp"></ListView>
+
+            <Button
+                android:id="@+id/btnAddRecipeId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_round"
+                android:text="Add recipe" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

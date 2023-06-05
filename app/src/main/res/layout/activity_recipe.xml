@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Recipe">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="vertical"
+        android:padding="15dp"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/btnReadInstructionsId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Speak Up" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/txtTaskNameId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="task name"
+                android:textSize="22sp" />
+
+            <ListView
+                android:id="@+id/listViewIngredientsForTaskId"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"></ListView>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnDoneWithTaskId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
