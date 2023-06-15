@@ -1,81 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".AddRecipe">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="15dp">
+        android:padding="16dp">
 
         <EditText
             android:id="@+id/txtRecipeNameId"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="recipe name"
-            android:textSize="20dp"
+            android:hint="Recipe Name"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:gravity="center_horizontal"/>
+            android:padding="12dp"
+            android:background="@drawable/edittext_rounded"
+            android:inputType="textCapWords"
+            android:gravity="center_horizontal" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="right"
-            android:padding="10dp">
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="left">
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/txtTaskId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="enter task" />
+                <EditText
+                    android:id="@+id/txtTaskId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Task"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded" />
 
-            <EditText
-                android:id="@+id/txtIngredientId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="amount and ingredient" />
+                <EditText
+                    android:id="@+id/txtIngredientId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Amount and Ingredient"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded" />
 
-            <EditText
-                android:id="@+id/txtMinutesId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="minutes for task"
-                android:inputType="time" />
+                <EditText
+                    android:id="@+id/txtMinutesId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Minutes for Task"
+                    android:padding="12dp"
+                    android:background="@drawable/edittext_rounded"
+                    android:inputType="time" />
             </LinearLayout>
-
 
             <Button
                 android:id="@+id/btnAddTaskId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add"
-                android:background="@drawable/btn_round"/>
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button_rounded"
+                android:textColor="@android:color/white" />
 
             <ListView
                 android:id="@+id/listViewRecipeId"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:padding="10dp"></ListView>
+                android:paddingTop="16dp"
+                android:divider="@android:color/darker_gray"
+                android:dividerHeight="1dp" />
 
             <Button
                 android:id="@+id/btnAddRecipeId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_round"
-                android:text="Add recipe" />
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button_rounded"
+                android:text="Add Recipe"
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 

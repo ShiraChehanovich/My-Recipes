@@ -59,7 +59,7 @@ public class ChooseActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
         // TODO Auto-generated method stub
-        //String name = adapter1.getItem(position);
+//        String name = adapter1.getItem(position);
         String name = recipes.get(position);
 
         Intent intent = new Intent(ChooseActivity.this, Recipe.class);
