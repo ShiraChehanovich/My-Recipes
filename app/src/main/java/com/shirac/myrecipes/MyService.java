@@ -54,19 +54,16 @@ public class MyService extends Service {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         // 2. Create Notification Channel (ONLY ONEs)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        //Create channel only if it is not already created
+        if (notificationManager.getNotificationChannel(CHANNEL1_ID) == null)
         {
-            //Create channel only if it is not already created
-            if (notificationManager.getNotificationChannel(CHANNEL1_ID) == null)
-            {
-                NotificationChannel notificationChannel = new NotificationChannel(
-                        CHANNEL1_ID,
-                        CHANNEL1_NAME,
-                        NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    CHANNEL1_ID,
+                    CHANNEL1_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT);
 
-                notificationManager.createNotificationChannel(notificationChannel);
+            notificationManager.createNotificationChannel(notificationChannel);
 
-            }
         }
     }
 
@@ -107,24 +104,25 @@ public class MyService extends Service {
     // 3. When buCreate the Notification & send it to the device status bar
     private void showNotification()
     {
-        String notificationTitle = "Cook Smart";
+        Log.d("debug", "Timer done!");
+        String notificationTitle = "My Recipes";
         String notificationText = "Done with " + tasks.get(id-1) +" id= "+id;
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,0);
 
         // Build Notification with NotificationCompat.Builder
         // on Build.VERSION < Oreo the notification avoid the CHANEL_ID
-//        Notification notification = new NotificationCompat().Builder(this, CHANNEL1_ID)
-//                .setSmallIcon(R.drawable.icon)  //Set the icon
-//                .setContentTitle(notificationTitle)         //Set the title of Notification
-//                .setContentText(notificationText)           //Set the text for notification
-//                .setContentIntent(pendingIntent)
-//                .build();
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL1_ID)
+                .setSmallIcon(R.drawable.vicon)  //Set the icon
+                .setContentTitle(notificationTitle)         //Set the title of Notification
+                .setContentText(notificationText)           //Set the text for notification
+                .setContentIntent(pendingIntent)
+                .build();
         // Send the notification to the device Status bar.
-//        notificationManager.notify(id, notification);
+        notificationManager.notify(id, notification);
 
         // Start foreground service.
-//        startForeground(id, notification);
+        startForeground(id, notification);
 
         id++;  // for multiple notifications on the same chanel
     }

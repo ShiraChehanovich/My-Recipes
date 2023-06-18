@@ -12,19 +12,27 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.os.Build.VERSION_CODES.N;
 
+import androidx.annotation.Nullable;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 public class ChooseActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    public static final String RECIPES_DB = "recipes.db";
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Button btn_choose, btn_add;
     private ArrayAdapter arrayAdapter;
     private ArrayList<String> recipes;
     private ListView recipes_list_view;
-
-    private SQLiteDatabase recipesDB = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +56,7 @@ public class ChooseActivity extends BaseActivity implements View.OnClickListener
         try
         {
             // Opens a current database or creates it
-            recipesDB = openOrCreateDatabase(RECIPES_DB, MODE_PRIVATE, null);
+//            recipesDB = openOrCreateDatabase(RECIPES_DB, MODE_PRIVATE, null);
         }
 
         catch(Exception e){
@@ -83,28 +91,24 @@ public class ChooseActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void getRecipesFromDB() {
-        String sql = "SELECT name FROM recipe_name_table;";
-        try {
-            Cursor cursor = recipesDB.rawQuery(sql, null);
-            if (cursor != null) {
-                Log.d("Error", "succeeded in query in choose activity");
-                cursor.moveToFirst();
-                do {
-                    //add recipe to list
-                    String recipe_name = cursor.getString(0);
-                    recipes.add(recipe_name);
-                } while (cursor.moveToNext());
+        recipes.clear();
+        this.db.collection("Recipes").get()
+                .addOnSuccessListener(querySnapshot -> {
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        recipes.add(document.getId());
+                        // Access individual documents here
+//                        Map<String, Object> data = document.getData();
+                        // Process the document data as needed
+                    }
+                    arrayAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    if (e.getMessage().contains("no such table")) {
+                        btn_add.setClickable(true);//in case that no recipe was added to db will let the user add a recipe
+                        return;
+                    }
+                });
 
-                //refresh the list view
-                arrayAdapter.notifyDataSetChanged();
-            } else return;
-        } catch (SQLiteException e) {
-            if (e.getMessage().contains("no such table")) {
-                btn_add.setClickable(true);//in case that no recipe was added to db will let the user add a recipe
-                return;
-            }
-
-        }
     }
 
 }

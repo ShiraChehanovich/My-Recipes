@@ -93,6 +93,35 @@
                 android:text="Add Recipe"
                 android:textColor="@android:color/white" />
 
+            <Button
+                android:id="@+id/btnAddPictureId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button_rounded"
+                android:text="Add Picture"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/iconCheckId"
+                android:layout_width="95dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/vicon"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btnAddPictureId"
+                app:layout_constraintEnd_toEndOf="@+id/btnAddPictureId"
+                app:layout_constraintStart_toEndOf="@+id/btnAddPictureId"
+                app:layout_constraintTop_toTopOf="@+id/btnAddPictureId" />
+
+            <ImageView
+                android:id="@+id/imageViewId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scaleType="fitCenter" />
+
         </LinearLayout>
 
     </LinearLayout>

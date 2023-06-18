@@ -5,15 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BaseActivity">
-    <!--        android:theme="@style/AppTheme.AppBarOverlay">-->
 
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-<!--        android:theme="AppBarOv">-->
-
-        <!--            app:popupTheme="@style/AppTheme.PopupOverlay" -->
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -24,9 +20,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-<!--    <include layout="@layout/content_base" />-->
-
-<!--    android:layout_margin="@dimen/fab_margin"-->
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -19,16 +19,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CookSmart"
-            android:textColor="#46eb7d"
-            android:textSize="23dp"
-            android:textStyle="bold"
-            app:fontFamily="serif" />
-
+            android:text="@string/PresentName"
+            android:padding="17dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="by Shira Chehanovich 2023"
+            android:text="id: 211983887"
             android:padding="17dp"/>
     </LinearLayout>
 
