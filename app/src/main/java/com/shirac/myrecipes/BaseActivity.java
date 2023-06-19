@@ -53,6 +53,8 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
+            case R.id.app_settings:
+                openDialogSettings();
             case R.id.about_settings:
                 openDialogAbout();
                 break;
@@ -61,6 +63,11 @@ public class BaseActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    private void openDialogSettings() {
+        Intent intent = new Intent(BaseActivity.this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     private void openDialogAbout(){

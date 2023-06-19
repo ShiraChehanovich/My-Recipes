@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.speech.tts.TextToSpeech;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +23,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
@@ -41,21 +39,17 @@ public class Recipe extends BaseActivity implements View.OnClickListener {
     private static String CHANNEL1_ID = "channel1";
     private static String CHANNEL1_NAME = "Channel 1 Demo";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     private String name_recipe;
     private ArrayList<TaskObject> tasksList;
-
     private ArrayList<String> allIngredients;
-
-    private TextToSpeech tts;
-//    private boolean flag_read_out_loud;
     private ArrayAdapter arrayAdapter;
     private Button btnDoneTask;
     private TextView txtTaskName;
     private ListView listViewIngredientsForTask;
     private ImageView imageViewRecipeId;
-
     private int recipe_task_num = 0;
+    private boolean isLongTimeEnabled;
+    private int longTimeValue;
 
     private SharedPreferences sp;
 
@@ -65,8 +59,6 @@ public class Recipe extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-//        flag_read_out_loud = false; //default is not to read out loud
-//        btnSpeak = findViewById(R.id.btnReadInstructionsId);
         btnDoneTask = findViewById(R.id.btnDoneWithTaskId);
         txtTaskName = findViewById(R.id.txtTaskNameId);
         listViewIngredientsForTask = findViewById(R.id.listViewIngredientsForTaskId);
@@ -75,10 +67,11 @@ public class Recipe extends BaseActivity implements View.OnClickListener {
         tasksList = new ArrayList<>();
         allIngredients = new ArrayList<>();
 
-//        btnSpeak.setOnClickListener(this);
         btnDoneTask.setOnClickListener(this);
 
         sp = getSharedPreferences("file", Context.MODE_PRIVATE);
+        isLongTimeEnabled = sp.getBoolean("longTimeEnabled", false);
+        longTimeValue = sp.getInt("longTimeValue", 0);
 
         Bundle  extras = getIntent().getExtras();
         name_recipe = extras.getString("selected_recipe");
@@ -145,6 +138,10 @@ public class Recipe extends BaseActivity implements View.OnClickListener {
     private void displayAllIngredients() {
         if (tasksList.size() == 0) {
             return;
+        }
+        int sumOfTime = calculateTotalTime();
+        if(!isLongTimeEnabled && sumOfTime >= this.longTimeValue) {
+            Toast.makeText(getApplicationContext(), "Warnning! this recipe takes a long time (" + sumOfTime + " minutes)", Toast.LENGTH_LONG).show();
         }
         for (int i = 0; i < tasksList.size() ; i++) {
             String [] ingredients = tasksList.get(i).getIngredients();
@@ -234,5 +231,14 @@ public class Recipe extends BaseActivity implements View.OnClickListener {
         Intent intent = new Intent(Recipe.this, ChooseActivity.class);
         startActivity(intent);
     }
+
+    private int calculateTotalTime() {
+        int totalTime = 0;
+        for (TaskObject task : tasksList) {
+            totalTime += task.getTime();
+        }
+        return totalTime;
+    }
+
 
 }

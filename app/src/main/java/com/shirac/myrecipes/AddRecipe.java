@@ -1,14 +1,9 @@
 package com.shirac.myrecipes;
 
 import android.Manifest;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -23,11 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,27 +29,19 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddRecipe extends BaseActivity implements View.OnClickListener {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private Uri imageUri;
     private Bitmap image;
 
-    Button btnAddTask, btnAddRecipe, btnAddPicure;
+    Button btnAddTask, btnAddRecipe, btnaddpicure;
     EditText txtRecipeName, txtTask, txtIngredient, txtMinutes;
     ListView recipeListView;
+
     ArrayList<TaskObject> tasksList;
     ArrayAdapter<TaskObject> adapter;
     ImageView iconCheckId;
@@ -67,7 +52,7 @@ public class AddRecipe extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_add_recipe);
         btnAddRecipe = findViewById(R.id.btnAddRecipeId);
         btnAddTask = findViewById(R.id.btnAddTaskId);
-        btnAddPicure = findViewById(R.id.btnAddPictureId);
+        btnaddpicure = findViewById(R.id.btnAddPictureId);
         btnAddTask.setOnClickListener(this);
         btnAddRecipe.setOnClickListener(this);
         txtIngredient = findViewById(R.id.txtIngredientId);
@@ -81,16 +66,12 @@ public class AddRecipe extends BaseActivity implements View.OnClickListener {
         adapter = new ArrayAdapter<TaskObject>(this, android.R.layout.simple_list_item_1, tasksList);
         recipeListView.setAdapter(adapter);
 
-        // Declare variables
-
-// Set OnClickListener to capture the picture
-        btnAddPicure.setOnClickListener(new View.OnClickListener() {
+        // Set OnClickListener to capture the picture
+        btnaddpicure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 askCameraPermission();
         }});
-
-
 
 
         txtIngredient.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -135,6 +116,7 @@ public class AddRecipe extends BaseActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 102) {
+            assert data != null;
             image = (Bitmap) data.getExtras().get("data");
             iconCheckId.setVisibility(View.VISIBLE);
         }
@@ -181,7 +163,6 @@ public class AddRecipe extends BaseActivity implements View.OnClickListener {
                     break;
                 }
                 //check if name already exist if not - add to table of recipes and create table for recipe
-//                db.collection(txtRecipeName.getText().toString()).document("Task-1").get()
                 db.collection("Recipes").document("txtRecipeName.getText().toString()").get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
@@ -208,7 +189,6 @@ public class AddRecipe extends BaseActivity implements View.OnClickListener {
                                         taskData.put("time", tasksList.get(i).getTime());
 
                                         // Step 4a: Save the data to Firestore
-//                                        db.collection(txtRecipeName.getText().toString()).document("Task-" +(i + 1)).set(taskData)
                                         db.collection("Tasks").document(txtRecipeName.getText().toString() + "-task-" +(i + 1)).set(taskData)
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override

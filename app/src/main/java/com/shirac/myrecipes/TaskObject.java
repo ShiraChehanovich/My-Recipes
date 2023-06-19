@@ -1,7 +1,5 @@
 package com.shirac.myrecipes;
 
-import java.util.ArrayList;
-
 public class TaskObject {
 
     private String nameOfTask;
