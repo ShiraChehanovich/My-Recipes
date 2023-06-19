@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddRecipe extends BaseActivity implements View.OnClickListener {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -152,17 +153,11 @@ public class AddRecipe extends BaseActivity implements View.OnClickListener {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Log.d("debug", "onSuccess: Success");
-                    // Image upload success
-                    // You can retrieve the download URL of the uploaded image using taskSnapshot.getDownloadUrl()
-                    // and store it in Firestore or perform any other necessary actions.
-//                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    // Store the downloadUrl in Firestore or use it as needed
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    // Image upload failed
-                    // Handle the failure scenario as per your requirements
+                    Toast.makeText(getApplicationContext(), "Upload image fail", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -187,7 +182,7 @@ public class AddRecipe extends BaseActivity implements View.OnClickListener {
                 }
                 //check if name already exist if not - add to table of recipes and create table for recipe
 //                db.collection(txtRecipeName.getText().toString()).document("Task-1").get()
-                db.document("Recipes/" + txtRecipeName.getText().toString() + "/" + txtRecipeName.getText().toString() + "-Tasks/" + txtRecipeName.getText().toString() + "-task-1").get()
+                db.collection("Recipes").document("txtRecipeName.getText().toString()").get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -196,19 +191,14 @@ public class AddRecipe extends BaseActivity implements View.OnClickListener {
                                     txtRecipeName.setText("");
                                 }
                                 else {
-                                    // build an SQL statement to create specific recipe table (if does not exist)
-                                    //remove spaces from table name:
-                                    String [] table_name_array = txtRecipeName.getText().toString().split(" ");
-                                    String table_name = table_name_array[0];
-                                    if(table_name_array.length>1){
-                                        for (int i = 1; i < table_name_array.length; i++) {
-                                            table_name += "_"+table_name_array[i];
-                                        }
-                                    }
 
                                     Map<String, Object> taskData = new HashMap<>();
+                                    Map<String, Object> referencesData = new HashMap<>();
+                                    int totalCount = tasksList.size(); // Total number of tasks
+                                    final AtomicInteger completedCount = new AtomicInteger(0);
 
                                     for (int i = 0; i < tasksList.size(); i++) {
+                                        final int index = i;
                                         taskData.clear();
                                         // Step 3a: Create a new document with an auto-generated ID
 
@@ -219,11 +209,21 @@ public class AddRecipe extends BaseActivity implements View.OnClickListener {
 
                                         // Step 4a: Save the data to Firestore
 //                                        db.collection(txtRecipeName.getText().toString()).document("Task-" +(i + 1)).set(taskData)
-                                        db.document("Recipes/" + txtRecipeName.getText().toString() + "/" + txtRecipeName.getText().toString() + "-Tasks/" + txtRecipeName.getText().toString() + "-task-" +(i + 1)).set(taskData)
+                                        db.collection("Tasks").document(txtRecipeName.getText().toString() + "-task-" +(i + 1)).set(taskData)
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-                                                        Toast.makeText(AddRecipe.this, "Note saved", Toast.LENGTH_LONG).show();
+                                                        Log.d("debug", "task saved");
+                                                        DocumentReference taskRef = db.collection("Tasks")
+                                                                .document(txtRecipeName.getText().toString() + "-task-" + (index + 1));
+                                                        referencesData.put("task-" + (index + 1), taskRef);
+                                                        int count = completedCount.incrementAndGet(); // Increment and get the updated count
+
+                                                        // Check if all tasks have been retrieved
+                                                        if (count == totalCount) {
+                                                            DocumentReference recipeRef = db.collection("Recipes").document(txtRecipeName.getText().toString());
+                                                            recipeRef.set(referencesData);
+                                                        }
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
@@ -233,7 +233,9 @@ public class AddRecipe extends BaseActivity implements View.OnClickListener {
                                                     }
                                                 });
                                     }
-                                    uploadImageToFirestore(txtRecipeName.getText().toString());
+                                    if(image != null) {
+                                        uploadImageToFirestore(txtRecipeName.getText().toString());
+                                    }
 
                                     Intent intent = new Intent(AddRecipe.this, ChooseActivity.class);
                                     startActivity(intent);
